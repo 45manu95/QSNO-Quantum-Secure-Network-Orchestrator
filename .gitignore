@@ -1,0 +1,20 @@
+# Python (Mininet, Ryu, Script di analisi)
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# C / C++ (Compilazione liboqs, OpenSSL)
+*.o
+*.so
+*.a
+build/
+bin/
+
+# File di Sistema (Mac e Windows)
+.DS_Store
+Thumbs.db
+
+# Catture di rete (pesanti)
+*.pcap
