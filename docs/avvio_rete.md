@@ -66,3 +66,32 @@ Digitare exit nella CLI Mininet, poi premere Ctrl+C nel terminale Ryu.
 
 Si usa il controller di esempio simple_switch_13.
 Policy QSNO, blocchi selettivi, TLS e profili CPU/rete non sono ancora implementati.
+## Avvio tramite script
+
+Dalla radice del repository, in due terminali separati:
+
+Terminale 1 — controller:
+```bash
+bash scripts/start_controller.sh
+```
+
+Terminale 2 — rete:
+```bash
+bash scripts/start_network.sh
+```
+
+Non è necessario attivare manualmente l'ambiente Python:
+lo script del controller usa ~/venvs/qsno-ryu/bin/ryu-manager.
+
+Verifica nella CLI Mininet:
+```text
+pingall
+sh ovs-vsctl show
+```
+
+Test degli script superato il 16 novembre 2026:
+6/6 risposte e controller con is_connected: true.
+
+Per arrestare: exit nella CLI Mininet, poi Ctrl+C nel
+terminale del controller. Avviare una sola rete Mininet
+alla volta sulla VM condivisa.
