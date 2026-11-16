@@ -11,4 +11,7 @@ fi
 exec "$RYU_MANAGER" \
     --ofp-listen-host 127.0.0.1 \
     --ofp-tcp-listen-port 6653 \
-    ryu.app.simple_switch_13
+    --wsapi-host 127.0.0.1 \
+    --wsapi-port 8080 \
+    ryu.app.simple_switch_13 \
+    ryu.app.ofctl_rest
