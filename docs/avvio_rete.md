@@ -95,3 +95,20 @@ Test degli script superato il 16 novembre 2026:
 Per arrestare: exit nella CLI Mininet, poi Ctrl+C nel
 terminale del controller. Avviare una sola rete Mininet
 alla volta sulla VM condivisa.
+## Controlli prima dell'avvio
+
+Lo script start_network.sh verifica:
+- presenza del comando mn;
+- raggiungibilità TCP del controller su 127.0.0.1:6653;
+- disponibilità di Open vSwitch;
+- assenza di uno switch s1 già esistente.
+
+Il controllo TCP non verifica da solo il protocollo OpenFlow.
+Se s1 esiste, lo script si ferma senza cancellarlo.
+Questi controlli non costituiscono un lock contro avvii simultanei.
+
+Test superati:
+- controller spento: avvio rifiutato;
+- controller acceso: rete funzionante, 6/6 ping;
+- rete già attiva: secondo avvio rifiutato;
+- dopo il rifiuto: rete originale ancora funzionante, 6/6 ping.
