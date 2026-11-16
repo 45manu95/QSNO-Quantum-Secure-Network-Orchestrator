@@ -112,3 +112,19 @@ Test superati:
 - controller acceso: rete funzionante, 6/6 ping;
 - rete già attiva: secondo avvio rifiutato;
 - dopo il rifiuto: rete originale ancora funzionante, 6/6 ping.
+
+## Verifica arresto e riavvio
+
+Test superato il 16 novembre 2026.
+
+Dopo exit dalla CLI Mininet e Ctrl+C nel terminale Ryu:
+- nessun bridge presente in ovs-vsctl list-br;
+- nessuna interfaccia del test visibile nel namespace principale;
+- nessun servizio in ascolto sulla porta TCP 6653.
+
+Riavviando controller e rete tramite gli script:
+- pingall: 6/6 risposte, 0% perdita;
+- controller: is_connected: true.
+
+È stato verificato l'arresto ordinato; il recupero dopo
+interruzioni anomale resta da implementare e verificare.
