@@ -194,3 +194,36 @@ stimata sperimentalmente con un campione sufficiente.
 La durata richiesta al client era 20 secondi; il ricevitore
 ha concluso più tardi. La causa della differenza resta da
 approfondire prima della campagna sperimentale.
+## Quote CPU dei client
+
+IoT e drone utilizzano CPULimitedHost con scheduler CFS.
+Il server non ha una quota CPU aggiuntiva configurata.
+
+La versione installata di Mininet calcola:
+quota = periodo × frazione CPU × numero di CPU della VM.
+
+Con 2 CPU e periodo di 100000 microsecondi:
+- IoT: cpu=0.1, quota=20000 microsecondi;
+- drone: cpu=0.5, quota=100000 microsecondi.
+
+Questi valori equivalgono rispettivamente al 20% e al 100%
+di una CPU. Sono limiti aggregati, non riserve né assegnazioni
+a core specifici. Cambiando il numero di CPU della VM,
+le quote vanno rivalutate.
+
+Le quote restano uguali nei profili nominal e degraded.
+
+### Verifica del 17 novembre 2026
+
+Appartenenza ai cgroup e valori quota/periodo verificati.
+
+Carico sequenziale di circa 5 secondi per client:
+- IoT: 5,003 s trascorsi, 1,006 s CPU, utilizzo 20,1%;
+- drone: 5,000 s trascorsi, 4,986 s CPU, utilizzo 99,7%.
+
+Contatori cumulativi osservati dopo la prova:
+- IoT: nr_throttled=48, throttled_time=3983711990 ns;
+- drone: nr_throttled=2, throttled_time=5532964 ns.
+
+Le quote non rappresentano uno specifico dispositivo ARM
+e non consentono di dedurre il consumo della batteria.

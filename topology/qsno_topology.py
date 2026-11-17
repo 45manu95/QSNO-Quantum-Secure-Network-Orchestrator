@@ -2,6 +2,7 @@
 
 from mininet.topo import Topo
 from mininet.link import TCLink
+from mininet.node import CPULimitedHost
 
 
 NETWORK_PROFILES = {
@@ -28,11 +29,19 @@ class QsnoTopology(Topo):
         )
         iot = self.addHost(
             "h_iot",
+            cls=CPULimitedHost,
+            cpu=0.1,
+            sched="cfs",
+            period_us=100000,
             ip="10.0.0.2/24",
             mac="00:00:00:00:00:02",
         )
         drone = self.addHost(
             "h_drone",
+            cls=CPULimitedHost,
+            cpu=0.5,
+            sched="cfs",
+            period_us=100000,
             ip="10.0.0.3/24",
             mac="00:00:00:00:00:03",
         )
