@@ -3,6 +3,23 @@ set -euo pipefail
 
 PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 
+if [[ $# -gt 1 ]]; then
+    echo "Uso: bash scripts/start_network.sh [nominal|degraded]" >&2
+    exit 2
+fi
+
+PROFILE="${1:-nominal}"
+
+case "$PROFILE" in
+    nominal|degraded)
+        ;;
+    *)
+        echo "Errore: profilo non valido: $PROFILE" >&2
+        echo "Profili ammessi: nominal, degraded" >&2
+        exit 2
+        ;;
+esac
+
 # Verifica la disponibilità del comando Mininet.
 if ! command -v mn >/dev/null 2>&1; then
     echo "Errore: comando mn non trovato." >&2
@@ -40,8 +57,10 @@ if sudo ovs-vsctl br-exists s1; then
     exit 1
 fi
 
+echo "Avvio QSNO con profilo di rete: $PROFILE"
+
 exec sudo mn \
     --custom "$PROJECT_ROOT/topology/qsno_topology.py" \
-    --topo qsno \
+    --topo "qsno,profile=$PROFILE" \
     --switch ovsk \
     --controller remote,ip=127.0.0.1,port=6653

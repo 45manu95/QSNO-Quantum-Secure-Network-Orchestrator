@@ -156,3 +156,41 @@ e 2 per argomenti non validi.
 
 Restano distinte la lettura delle regole, la conferma OpenFlow
 tramite barrier e la verifica del traffico applicativo.
+## Profili di rete
+
+Avvio dalla radice del repository, con Ryu già attivo:
+
+```bash
+bash scripts/start_network.sh nominal
+bash scripts/start_network.sh degraded
+```
+
+Eseguire un solo profilo alla volta, chiudendo prima Mininet con exit.
+Senza argomento viene selezionato nominal.
+
+| Parametro client–switch, per direzione | nominal | degraded |
+|---|---:|---:|
+| Banda | 10 Mbit/s | 1 Mbit/s |
+| Ritardo aggiunto | 5 ms | 40 ms |
+| Perdita configurata | 0% | 1% |
+
+Il profilo si applica ai collegamenti di IoT e drone tramite TCLink.
+Il collegamento server–switch rimane senza shaping aggiuntivo.
+
+### Verifiche preliminari del 17 novembre 2026
+
+- Nominale: RTT minimo IoT 10,189 ms; drone 10,371 ms.
+- Degradato: RTT minimo IoT 80,485 ms; drone 82,162 ms.
+- Configurazione tc verificata sul collegamento IoT.
+- Throughput TCP IoT → server, misurato dal ricevitore:
+  - nominale: 8,28 Mbit/s, 32,3 MiB in 32,7 secondi;
+  - degradato: 955 kbit/s, 2,62 MiB in 23,1 secondi.
+- Nessuna connessione TCP residua dopo la prova nominale.
+
+Una sola prova di throughput per profilo: non costituisce
+un benchmark statistico. La perdita configurata non è stata
+stimata sperimentalmente con un campione sufficiente.
+
+La durata richiesta al client era 20 secondi; il ricevitore
+ha concluso più tardi. La causa della differenza resta da
+approfondire prima della campagna sperimentale.
