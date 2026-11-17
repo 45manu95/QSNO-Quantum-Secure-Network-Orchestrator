@@ -113,18 +113,46 @@ Test superati:
 - rete già attiva: secondo avvio rifiutato;
 - dopo il rifiuto: rete originale ancora funzionante, 6/6 ping.
 
-## Verifica arresto e riavvio
+## Verifica delle regole e risultati JSON
 
-Test superato il 16 novembre 2026.
+Il client legge /stats/flow/1 dopo ogni modifica.
 
-Dopo exit dalla CLI Mininet e Ctrl+C nel terminale Ryu:
-- nessun bridge presente in ovs-vsctl list-br;
-- nessuna interfaccia del test visibile nel namespace principale;
-- nessun servizio in ascolto sulla porta TCP 6653.
+Per il blocco controlla cookie, tabella, priorità, match,
+azioni vuote e timeout della regola pari a zero.
+Per lo sblocco controlla l'assenza del cookie riservato al client.
+Una risposta senza lo switch richiesto viene trattata come errore.
 
-Riavviando controller e rete tramite gli script:
-- pingall: 6/6 risposte, 0% perdita;
-- controller: is_connected: true.
+### Utilizzo
 
-È stato verificato l'arresto ordinato; il recupero dopo
-interruzioni anomale resta da implementare e verificare.
+```bash
+python3 controller/sdn_client.py block iot --json
+python3 controller/sdn_client.py unblock iot --json
+```
+
+Target supportati: iot e drone.
+
+- RULE_VERIFIED: lo stato richiesto della regola è stato osservato.
+- ERROR con rule_state UNKNOWN: operazione non confermata.
+- traffic_verified: false: il comando non esegue prove applicative.
+- request_and_verification_ms: tempo complessivo della richiesta
+  HTTP e della verifica tramite statistiche, misurato con
+  orologio monotono. Non è il tempo puro di applicazione OpenFlow.
+
+La funzione set_classic_block restituisce un dizionario in caso
+di successo e solleva un'eccezione in caso di errore.
+La CLI restituisce 0 per successo, 1 per errore operativo
+e 2 per argomenti non validi.
+
+### Test superati il 17 novembre 2026
+
+- Presenza e rimozione della regola IoT verificate automaticamente.
+- Blocco drone: drone in timeout, IoT ancora operativo.
+- Sblocco drone: HTTP 200 ripristinato.
+- Blocchi simultanei: entrambi i client in timeout.
+- Sblocco del solo IoT: IoT operativo, drone ancora bloccato.
+- Switch scollegato con Ryu attivo: HTTP 404 e uscita 1.
+- Output JSON di blocco e sblocco verificato.
+- Ryu spento: JSON ERROR/UNKNOWN e uscita 1.
+
+Restano distinte la lettura delle regole, la conferma OpenFlow
+tramite barrier e la verifica del traffico applicativo.
