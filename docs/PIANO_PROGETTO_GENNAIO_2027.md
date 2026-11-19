@@ -181,7 +181,9 @@ La prima versione accetta un'interruzione breve e la misura. Non promette una ri
 
 ### Contratto fra i componenti, da fissare entro il 22 novembre
 
-Il formato può essere JSON, senza imporre un framework web:
+Il [contratto QSNO ↔ helper v1](CONTRATTO_QSNO_HELPER_V1.md), proposto il 19 novembre con [esempi JSON](../contracts/qsno-helper-v1.examples.json), precisa richieste, risposte, trasporto locale, timeout e gestione dei duplicati. È una specifica per lo sviluppo; il servizio helper persistente deve ancora essere implementato. Per gli eventi IDS e la telemetria di scenario restano da fissare le rispettive interfacce.
+
+La bozza iniziale identificava questi campi concettuali; per QSNO ↔ helper prevalgono ora nomi e struttura del documento v1:
 
 - Evento: `event_id`, `target_id`, `severity`, `source`, `timestamp`.
 - Richiesta: `policy_id`, `target_id`, `required_profile`, `reason`, `timeout_ms`.

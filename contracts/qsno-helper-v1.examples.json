@@ -1,0 +1,264 @@
+{
+  "contract": "QSNO-helper v1",
+  "note": "Esempi inventati per sviluppare il chiamante; non sono output di un helper implementato. I casi di timeout e policy obsoleta sono scenari alternativi.",
+  "scenarios": [
+    {
+      "name": "status_initial",
+      "request": {
+        "schema_version": 1,
+        "message_type": "request",
+        "request_id": "req-iot-001",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "get_status"
+      },
+      "response": {
+        "schema_version": 1,
+        "message_type": "response",
+        "request_id": "req-iot-001",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "get_status",
+        "ok": true,
+        "state": {
+          "status": "IDLE",
+          "policy_id": null,
+          "policy_version": 0,
+          "desired_profile": null,
+          "observed_profile": null,
+          "observed_group": null,
+          "certificate_ok": false,
+          "application_ack": false,
+          "connection_id": null,
+          "last_acked_seq": null,
+          "supported_profiles": [
+            "CLASSIC",
+            "HYBRID"
+          ]
+        },
+        "duration_ms": 0.4,
+        "error": null
+      }
+    },
+    {
+      "name": "start_classic",
+      "request": {
+        "schema_version": 1,
+        "message_type": "request",
+        "request_id": "req-iot-start",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "set_profile",
+        "policy_id": "policy-iot-001",
+        "policy_version": 1,
+        "required_profile": "CLASSIC",
+        "timeout_ms": 10000,
+        "reason": "Avvio classico esplicitamente consentito"
+      },
+      "response": {
+        "schema_version": 1,
+        "message_type": "response",
+        "request_id": "req-iot-start",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "set_profile",
+        "ok": true,
+        "state": {
+          "status": "CLASSIC_ACTIVE",
+          "policy_id": "policy-iot-001",
+          "policy_version": 1,
+          "desired_profile": "CLASSIC",
+          "observed_profile": "CLASSIC",
+          "observed_group": "X25519",
+          "certificate_ok": true,
+          "application_ack": true,
+          "connection_id": "conn-iot-001",
+          "last_acked_seq": 1,
+          "supported_profiles": [
+            "CLASSIC",
+            "HYBRID"
+          ]
+        },
+        "duration_ms": 120.2,
+        "error": null
+      }
+    },
+    {
+      "name": "hybrid_success",
+      "request": {
+        "schema_version": 1,
+        "message_type": "request",
+        "request_id": "req-iot-002",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "set_profile",
+        "policy_id": "policy-iot-002",
+        "policy_version": 2,
+        "required_profile": "HYBRID",
+        "timeout_ms": 10000,
+        "reason": "Evento di rischio alto simulato"
+      },
+      "response": {
+        "schema_version": 1,
+        "message_type": "response",
+        "request_id": "req-iot-002",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "set_profile",
+        "ok": true,
+        "state": {
+          "status": "HYBRID_ACTIVE",
+          "policy_id": "policy-iot-002",
+          "policy_version": 2,
+          "desired_profile": "HYBRID",
+          "observed_profile": "HYBRID",
+          "observed_group": "X25519MLKEM768",
+          "certificate_ok": true,
+          "application_ack": true,
+          "connection_id": "conn-iot-002",
+          "last_acked_seq": 42,
+          "supported_profiles": [
+            "CLASSIC",
+            "HYBRID"
+          ]
+        },
+        "duration_ms": 185.4,
+        "error": null
+      }
+    },
+    {
+      "name": "hybrid_timeout",
+      "request": {
+        "schema_version": 1,
+        "message_type": "request",
+        "request_id": "req-iot-002",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "set_profile",
+        "policy_id": "policy-iot-002",
+        "policy_version": 2,
+        "required_profile": "HYBRID",
+        "timeout_ms": 10000,
+        "reason": "Evento di rischio alto simulato"
+      },
+      "response": {
+        "schema_version": 1,
+        "message_type": "response",
+        "request_id": "req-iot-002",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "set_profile",
+        "ok": false,
+        "state": {
+          "status": "BLOCKED",
+          "policy_id": "policy-iot-002",
+          "policy_version": 2,
+          "desired_profile": "HYBRID",
+          "observed_profile": null,
+          "observed_group": null,
+          "certificate_ok": false,
+          "application_ack": false,
+          "connection_id": null,
+          "last_acked_seq": 41,
+          "supported_profiles": [
+            "CLASSIC",
+            "HYBRID"
+          ]
+        },
+        "duration_ms": 10000,
+        "error": {
+          "code": "timeout",
+          "detail": "Connessione e conferma applicativa non completate entro il limite"
+        }
+      }
+    },
+    {
+      "name": "stop",
+      "request": {
+        "schema_version": 1,
+        "message_type": "request",
+        "request_id": "req-iot-003",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "stop",
+        "policy_id": "policy-iot-003",
+        "policy_version": 3,
+        "timeout_ms": 10000,
+        "reason": "Fine della prova"
+      },
+      "response": {
+        "schema_version": 1,
+        "message_type": "response",
+        "request_id": "req-iot-003",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "stop",
+        "ok": true,
+        "state": {
+          "status": "IDLE",
+          "policy_id": "policy-iot-003",
+          "policy_version": 3,
+          "desired_profile": null,
+          "observed_profile": null,
+          "observed_group": null,
+          "certificate_ok": false,
+          "application_ack": false,
+          "connection_id": null,
+          "last_acked_seq": 42,
+          "supported_profiles": [
+            "CLASSIC",
+            "HYBRID"
+          ]
+        },
+        "duration_ms": 2.1,
+        "error": null
+      }
+    },
+    {
+      "name": "stale_policy",
+      "request": {
+        "schema_version": 1,
+        "message_type": "request",
+        "request_id": "req-iot-stale",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "set_profile",
+        "policy_id": "policy-iot-001",
+        "policy_version": 1,
+        "required_profile": "CLASSIC",
+        "timeout_ms": 10000,
+        "reason": "Esempio di vecchia policy da rifiutare"
+      },
+      "response": {
+        "schema_version": 1,
+        "message_type": "response",
+        "request_id": "req-iot-stale",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "set_profile",
+        "ok": false,
+        "state": {
+          "status": "HYBRID_ACTIVE",
+          "policy_id": "policy-iot-002",
+          "policy_version": 2,
+          "desired_profile": "HYBRID",
+          "observed_profile": "HYBRID",
+          "observed_group": "X25519MLKEM768",
+          "certificate_ok": true,
+          "application_ack": true,
+          "connection_id": "conn-iot-002",
+          "last_acked_seq": 42,
+          "supported_profiles": [
+            "CLASSIC",
+            "HYBRID"
+          ]
+        },
+        "duration_ms": 0.3,
+        "error": {
+          "code": "stale_policy",
+          "detail": "La versione 1 non supera la versione corrente 2"
+        }
+      }
+    }
+  ]
+}

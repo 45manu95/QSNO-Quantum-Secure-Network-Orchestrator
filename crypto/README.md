@@ -77,6 +77,8 @@ In questa VM Falcon impiega circa 3,88 volte il tempo di ML-DSA per firmare, a f
 
 ## Servizi TLS e interfaccia per QSNO
 
+Il [contratto QSNO ↔ helper v1](../docs/CONTRATTO_QSNO_HELPER_V1.md) propone messaggi per lettura dello stato, cambio di profilo e stop; gli [esempi JSON](../contracts/qsno-helper-v1.examples.json) permettono di sviluppare il chiamante. Il servizio persistente descritto dal contratto deve ancora essere implementato. Il comando `probe` qui sotto verifica una connessione e la chiude: il suo successo non indica traffico continuativo migrato.
+
 `qsno_tls.py` usa soltanto Python 3.8+ e il binario OpenSSL installato. Riusa i certificati già generati in `/home/mininet/qsno-crypto/tls-lab`; non li modifica. È una base per verificare i profili da un orchestratore. Ogni comando `probe` apre una nuova connessione e invia una richiesta HTTP al servizio di prova OpenSSL.
 
 Avvio del servizio classico, nel primo terminale SSH:

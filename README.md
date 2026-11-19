@@ -7,6 +7,7 @@ Progetto del corso di Network Security di Manuel Ganino e Roberto Di Bella. L'ob
 Sono disponibili i componenti TLS classico/ibrido, i benchmark delle primitive e una prima verifica integrata Mininet/SDN con **12 controlli superati su 12**. Il motore decisionale automatico e il client con traffico continuativo sono i prossimi componenti da sviluppare.
 
 - [Codice crittografico e istruzioni](crypto/README.md).
+- [Proposta di contratto QSNO ↔ helper v1](docs/CONTRATTO_QSNO_HELPER_V1.md) e [messaggi di esempio](contracts/qsno-helper-v1.examples.json), per lo sviluppo comune; helper persistente ancora da implementare.
 - [Risultati originali verificati del 18 novembre](crypto/results/verified-2026-11-18/README.md): 90 esecuzioni di benchmark, 270 misure e report Mininet.
 - [Cosa stiamo costruendo e divisione del lavoro](docs/QUADRO_PROGETTO_E_REPORT.md).
 - [Piano fino all'esame](docs/PIANO_PROGETTO_GENNAIO_2027.md).
