@@ -6,6 +6,20 @@
 **Disponibilità concordata:** 8 ore a settimana per persona  
 **Obiettivo intermedio:** demo integrata e ripetibile entro il 13 dicembre; funzionalità congelate il 20 dicembre.
 
+## 0. Stato verificato e priorità al 19 novembre
+
+Il risultato finale resta il QSNO automatico: un programma che riceve contesto/eventi, decide il profilo ammesso, controlla endpoint e rete e verifica l'esito. L'installazione delle librerie, i microbenchmark e i controlli di integrazione sono componenti e verifiche preparatorie a questo programma.
+
+**Completato:** ambiente reale Ubuntu 20.04.1 LTS; OpenSSL 3.5.9 con TLS classico e ibrido verificati; liboqs 0.16.0 con ML-KEM-768, ML-DSA-44 e Falcon-512; 30 esecuzioni per algoritmo; prima integrazione TLS/Mininet/SDN con 12 controlli superati e uscita 0. La rete del collega A comprende topologia, quote CPU, profili di rete e blocco selettivo del servizio classico.
+
+**Da sviluppare nel codice applicativo verificato:** motore di policy del QSNO, gestione degli stati e dell'evento di rischio, traffico continuativo con numeri di sequenza, passaggio automatico fra connessioni e campagna comparativa delle tre policy. La prima integrazione già riuscita apre nuove connessioni di prova e applica blocchi secondo una sequenza fissa: non costituisce ancora una decisione adattiva del QSNO.
+
+**Visibilità del codice:** la rete è pubblicata su `feature/sdn-infrastructure`; codice crittografico, istruzioni e risultati sono raccolti su `feature/crypto-integration`, per la revisione comune prima dell'integrazione su `develop`. Il 19 novembre è stato controllato l'archivio originale della VM: 90 output grezzi, 270 misure, riepilogo statistico ricalcolato e report Mininet con 12/12 controlli superati.
+
+**Primo aggiornamento al docente proposto:** lunedì 23 novembre; successivi ogni 14 giorni: 7 e 21 dicembre, 4 gennaio. Consegna interna finale il 10 gennaio. Ogni aggiornamento deve mostrare codice, una prova e un risultato, distinguendo lavoro concluso e lavoro successivo. La preparazione del report rientra nelle ore di documentazione/coordinamento già previste.
+
+Il percorso operativo sintetico è in `docs/QUADRO_PROGETTO_E_REPORT.md`. Il primo report è predisposto in `docs/REPORT_01_2026-11-23.md`, come bozza basata sulle verifiche disponibili al 18 novembre.
+
 ## 1. Risultato da consegnare
 
 Un prototipo riproducibile su VM Linux che gestisce due client emulati, IoT e drone, collegati a un server tramite uno switch SDN. QSNO seleziona un profilo di scambio chiavi TLS in base a requisiti di sicurezza, capacità dichiarate, condizioni della rete e batteria simulata. Un evento di rischio simulato impone il profilo ibrido; il controller impedisce di continuare a usare il servizio classico quando non è più consentito. Gli endpoint aprono una nuova connessione e QSNO verifica l'esito prima di dichiarare completata la transizione.
@@ -109,7 +123,7 @@ Tailscale e SSH servono all'amministrazione e non sono parte del percorso dei pa
 
 ### Stack da fissare entro il 22 novembre
 
-- Ubuntu 22.04 LTS già scelta, con risorse assegnate alla VM registrate.
+- Ubuntu 20.04.1 LTS effettivamente verificata sulla VM condivisa, con 2 CPU virtuali e circa 4 GiB di RAM. La precedente indicazione 22.04 derivava dal recap iniziale; l'ambiente operativo è stato accertato il 18 novembre.
 - Mininet, OVS e OpenFlow 1.3 con un test esplicito del controller remoto.
 - Ryu se l'ambiente funziona in modo riproducibile; OS-Ken come alternativa tecnica, da concordare con il docente se Ryu è un vincolo del corso. Il repository Ryu dichiara di non essere mantenuto: non dedicare una settimana a risolverne le dipendenze.
 - OpenSSL della linea 3.5, con una patch mantenuta selezionata, verificata e fissata nella prima settimana; installazione isolata che non sostituisce l'OpenSSL di sistema.
@@ -397,6 +411,20 @@ Problema, obiettivo e ambito; architettura; policy; transizione; ambiente; metod
 7. Aprire un grafico già generato con le misure e spiegare un limite dell'esperimento.
 
 Preparare una registrazione breve, snapshot della VM e risultati esportati; il giorno dell'esame non deve dipendere da download o aggiornamenti. Entrambi devono saper spiegare perché servono gli agent, perché TLS richiede un nuovo handshake, cosa prova l'IDS simulato e perché Mininet non misura la batteria reale.
+
+### Aggiornamenti al docente ogni due settimane
+
+| Data proposta | Evidenze da presentare | Passo successivo |
+|---|---|---|
+| 23 novembre 2026 | Architettura, codice dei componenti, risultati delle primitive, 12 controlli TLS/Mininet/SDN riusciti; perimetro da confermare | Motore di policy e prima applicazione automatica |
+| 7 dicembre 2026 | Codice del QSNO; scenario evento → decisione → blocco → nuova connessione verificata; gestione di un fallimento | Robustezza e protocollo degli esperimenti |
+| 21 dicembre 2026 | Demo stabile; confronto fra classico fisso, ibrido fisso e adattivo; dati e primi grafici | Analisi, discussione e relazione completa |
+| 4 gennaio 2027 | Risultati consolidati, relazione, riproducibilità e demo registrata | Prove orali e correzioni finali |
+| 10 gennaio 2027 | Versione finale del progetto, materiali e backup | Preparazione alla data effettiva dell'esame |
+
+Il primo invio è previsto all'inizio della settimana del 23 novembre, come indicato dagli studenti; le date successive sono proposte a intervalli di 14 giorni. Non sono promemoria automatici né invii già effettuati. Per ciascun report dedicare 30–45 minuti complessivi del tempo già assegnato a documentazione e coordinamento: uno studente prepara, l'altro rilegge.
+
+Formato consigliato: massimo una pagina con obiettivo del periodo, attività concluse e responsabilità, collegamenti ai commit, una prova con il suo risultato, problemi aperti e obiettivo delle due settimane successive. Nel primo report chiedere un riscontro sul perimetro TLS, sul trigger IDS simulato e sul ruolo separato dei benchmark delle firme. IPsec, IDS reale e autenticazione TLS PQ non vanno presentati come funzionalità già realizzate.
 
 ## 12. Checklist finale del 10 gennaio
 

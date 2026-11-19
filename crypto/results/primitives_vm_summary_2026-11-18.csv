@@ -1,0 +1,10 @@
+algorithm,operation,runs,median_of_run_means_us,q1_of_run_means_us,q3_of_run_means_us
+ML-KEM-768,keygen,30,16.068,16.006,16.158
+ML-KEM-768,encaps,30,15.388,15.333,15.452
+ML-KEM-768,decaps,30,16.495,16.458,16.522
+ML-DSA-44,keypair,30,27.856,27.689,28.116
+ML-DSA-44,sign,30,76.068,75.349,76.507
+ML-DSA-44,verify,30,25.996,25.952,26.117
+Falcon-512,keypair,30,6982.045,6894.490,7122.486
+Falcon-512,sign,30,295.060,294.312,295.667
+Falcon-512,verify,30,51.462,51.379,51.547

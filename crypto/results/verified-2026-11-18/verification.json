@@ -1,0 +1,31 @@
+{
+  "archive": "../qsno-verifiche-2026-11-18.tar.gz",
+  "archive_sha256_on_mac": "49afe3a7b4d49350dc1a181b6f26855fd3eff8696fefcdb9bd0791a846a08e6b",
+  "checked_on": "2026-11-19",
+  "remote_sha256_comparison": "not provided; no comparison claimed",
+  "archive_members": 156,
+  "benchmark_raw_files_checked": 90,
+  "measurement_rows_checked_against_raw": 270,
+  "summary_rows_recomputed": 9,
+  "mininet_checks_passed": 12,
+  "mininet_cleanup_errors": [],
+  "private_key_pem_blocks_found": 0,
+  "selected_files": {
+    "liboqs-metadata.json": {
+      "archive_member": "liboqs-series-01/metadata.json",
+      "sha256": "a6294477cf988913da98786902c758c66abfcb358a32e998222a1daff1f93f71"
+    },
+    "liboqs-summary.csv": {
+      "archive_member": "liboqs-series-01/summary.csv",
+      "sha256": "49c8e6701461309354508044573418ec28b4698a185b823103ff097481b80a73"
+    },
+    "liboqs-measurements.csv": {
+      "archive_member": "liboqs-series-01/measurements.csv",
+      "sha256": "1577287712030fa5ae877dcf5e4d40641822f6365c9b78fb92176f2d9c289261"
+    },
+    "mininet-tls-report.json": {
+      "archive_member": "mininet-tls-01/report.json",
+      "sha256": "5cee8e30b65c8ce9a9f2841f690f54e03cfb7e44614ab1762015cfa5857f1e0d"
+    }
+  }
+}

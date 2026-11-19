@@ -1,0 +1,394 @@
+{
+  "started_utc": "2026-11-18T17:14:09.715468+00:00",
+  "status": "complete",
+  "source": "/home/mininet/qsno-crypto/src/liboqs-0.16.0",
+  "git_commit": "5a1a854b0dc9f2141bdc771c555ee60c37950183",
+  "tracked_changes": "",
+  "platform": "Linux-5.4.0-42-generic-x86_64-with-glibc2.29",
+  "machine": "x86_64",
+  "python": "3.8.10",
+  "repetitions": 30,
+  "duration_per_operation_s": 1,
+  "seed": 20261118,
+  "configuration": {
+    "CMAKE_BUILD_TYPE": "Release",
+    "OQS_USE_OPENSSL": "OFF",
+    "OQS_LIBJADE_BUILD": "OFF",
+    "BUILD_SHARED_LIBS": "ON",
+    "OQS_DIST_BUILD": "ON",
+    "OQS_MINIMAL_BUILD": "KEM_ml_kem_768;SIG_ml_dsa_44;SIG_falcon_512",
+    "OQS_OPT_TARGET": "auto"
+  },
+  "schedule": [
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 22
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 23
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 20
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 18
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 8
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 4
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 12
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 21
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 29
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 17
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 15
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 30
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 1
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 20
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 15
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 3
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 24
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 13
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 18
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 21
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 11
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 12
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 7
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 29
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 11
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 20
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 30
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 7
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 6
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 19
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 22
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 18
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 23
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 3
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 14
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 6
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 25
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 28
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 16
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 28
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 13
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 27
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 27
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 2
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 19
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 8
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 9
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 9
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 29
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 14
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 6
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 25
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 4
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 26
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 27
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 2
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 21
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 26
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 11
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 25
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 5
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 13
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 5
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 7
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 17
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 24
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 23
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 5
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 16
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 12
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 30
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 26
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 16
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 3
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 24
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 10
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 1
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 10
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 8
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 19
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 22
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 14
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 17
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 10
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 1
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 2
+    },
+    {
+      "algorithm": "ML-KEM-768",
+      "repeat": 4
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "repeat": 15
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 9
+    },
+    {
+      "algorithm": "Falcon-512",
+      "repeat": 28
+    }
+  ],
+  "summary_definition": "Quantiles across per-run mean times; not per-operation latency quantiles.",
+  "signature_length_note": "last_signature_bytes is the last sampled signature, not an average.",
+  "correctness_checks": {
+    "ML-KEM-768": "passed",
+    "ML-DSA-44": "passed",
+    "Falcon-512": "passed"
+  },
+  "ended_utc": "2026-11-18T17:18:44.373965+00:00",
+  "raw_files": 90,
+  "measurement_rows": 270
+}

@@ -1,8 +1,20 @@
-# QSNO-Quantum-Secure-Network-Orchestrator
-An SDN Architecture for Cryptographic Agility and Adaptive Security. The system dynamically orchestrates hybrid and post-quantum encryption to balance security, latency, and power consumption in IoT devices.
+# QSNO — Quantum Secure Network Orchestrator
 
+Progetto del corso di Network Security di Manuel Ganino e Roberto Di Bella. L'obiettivo è realizzare un orchestratore SDN che adatti i profili crittografici alle capacità dei dispositivi, alla rete e a eventi di rischio simulati. Consegna interna: **10 gennaio 2027**.
 
-PER ORA QUESTO RIMMARRÀ SOLO PER CAPIRE QUALI SONO I BRANCH
+## Stato del prototipo — 19 novembre 2026
+
+Sono disponibili i componenti TLS classico/ibrido, i benchmark delle primitive e una prima verifica integrata Mininet/SDN con **12 controlli superati su 12**. Il motore decisionale automatico e il client con traffico continuativo sono i prossimi componenti da sviluppare.
+
+- [Codice crittografico e istruzioni](crypto/README.md).
+- [Risultati originali verificati del 18 novembre](crypto/results/verified-2026-11-18/README.md): 90 esecuzioni di benchmark, 270 misure e report Mininet.
+- [Cosa stiamo costruendo e divisione del lavoro](docs/QUADRO_PROGETTO_E_REPORT.md).
+- [Piano fino all'esame](docs/PIANO_PROGETTO_GENNAIO_2027.md).
+- [Bozza del primo report al docente, 23 novembre](docs/REPORT_01_2026-11-23.md).
+
+Questi file sono condivisi sul branch `feature/crypto-integration`. La rete del collaboratore è sul branch `feature/sdn-infrastructure`; il controllo integrato usa la revisione fissata nelle istruzioni crittografiche. L'integrazione comune avviene su `develop` dopo la revisione delle modifiche.
+
+Il prototipo TLS usa X25519 e X25519MLKEM768 con autenticazione ECDSA. ML-DSA e Falcon sono valutati separatamente; IPsec e IDS reale richiedono un riscontro del docente sul perimetro della prima consegna.
 
 ## 🌿 Struttura dei Branch del Progetto
 
@@ -14,7 +26,7 @@ Per lavorare in parallelo senza creare conflitti, utilizziamo un sistema di bran
 | **`develop`** | Il branch di integrazione dove uniremo il nostro lavoro. | Qui uniamo i nostri lavori individuali per testare che tutto il progetto funzioni insieme. |
 | **`feature/sdn-infrastructure`** | Il branch dedicato all'impostazione di Mininet e del controller Ryu. *(Assegnato a chi fa la rete)* | Isolato finché la rete non sta in piedi; poi si fa l'unione (merge) su `develop`. |
 | **`feature/qsno-logic`** | Il branch dedicato alla logica decisionale che valuterà batteria, rete e minacce. | Da unire a `develop` solo quando l'algoritmo non presenta errori. |
-| **`feature/crypto-integration`** | Il branch dove verranno compilate e integrate le librerie come `liboqs` all'interno di IPsec e TLS. *(Assegnato a chi fa la crittografia)* | Modifiche isolate qui finché la compilazione crittografica non va a buon fine. |
+| **`feature/crypto-integration`** | Servizi TLS, gestione dei collegamenti, benchmark liboqs e raccolta dei risultati. *(Assegnato a chi fa la crittografia)* | Da unire a `develop` dopo revisione e prove di integrazione. |
 
 ---
 
