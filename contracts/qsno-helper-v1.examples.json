@@ -1,6 +1,6 @@
 {
   "contract": "QSNO-helper v1",
-  "note": "Esempi inventati per sviluppare il chiamante; non sono output di un helper implementato. I casi di timeout e policy obsoleta sono scenari alternativi.",
+  "note": "Esempi inventati per sviluppare il chiamante; non sono output di un helper implementato e le durate non sono benchmark. Gli scenari sono indipendenti o alternativi: richieste con gli stessi identificativi non vanno eseguite tutte in sequenza. Solo request, response e helper_response rappresentano messaggi sul socket; exchanges e expected_* sono descrizioni delle prove simulate.",
   "scenarios": [
     {
       "name": "status_initial",
@@ -168,7 +168,21 @@
         "duration_ms": 10000,
         "error": {
           "code": "timeout",
-          "detail": "Connessione e conferma applicativa non completate entro il limite"
+          "detail": "Apertura TCP riuscita; handshake TLS non completato entro la scadenza del comando",
+          "phase": "tls_handshake",
+          "attempt": {
+            "connection_id": "conn-iot-002",
+            "tcp_connected": true,
+            "tls_handshake_ok": false,
+            "tls_version": null,
+            "observed_group": null,
+            "ciphersuite": null,
+            "certificate_ok": null,
+            "application_ack": null,
+            "expected_ack_seq": null,
+            "received_ack_seq": null,
+            "connection_closed": true
+          }
         }
       }
     },
@@ -256,9 +270,253 @@
         "duration_ms": 0.3,
         "error": {
           "code": "stale_policy",
-          "detail": "La versione 1 non supera la versione corrente 2"
+          "detail": "La versione 1 non supera la versione corrente 2",
+          "phase": "validation"
         }
       }
+    },
+    {
+      "name": "hybrid_ack_timeout",
+      "request": {
+        "schema_version": 1,
+        "message_type": "request",
+        "request_id": "req-iot-002",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "set_profile",
+        "policy_id": "policy-iot-002",
+        "policy_version": 2,
+        "required_profile": "HYBRID",
+        "timeout_ms": 10000,
+        "reason": "Evento di rischio alto simulato"
+      },
+      "response": {
+        "schema_version": 1,
+        "message_type": "response",
+        "request_id": "req-iot-002",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "set_profile",
+        "ok": false,
+        "state": {
+          "status": "BLOCKED",
+          "policy_id": "policy-iot-002",
+          "policy_version": 2,
+          "desired_profile": "HYBRID",
+          "observed_profile": null,
+          "observed_group": null,
+          "certificate_ok": false,
+          "application_ack": false,
+          "connection_id": null,
+          "last_acked_seq": 41,
+          "supported_profiles": [
+            "CLASSIC",
+            "HYBRID"
+          ]
+        },
+        "duration_ms": 10000,
+        "error": {
+          "code": "timeout",
+          "detail": "TLS e certificato verificati, ma nessuna risposta applicativa al messaggio 42 entro la scadenza del comando",
+          "phase": "application_ack",
+          "attempt": {
+            "connection_id": "conn-iot-002",
+            "tcp_connected": true,
+            "tls_handshake_ok": true,
+            "tls_version": "TLSv1.3",
+            "observed_group": "X25519MLKEM768",
+            "ciphersuite": "TLS_AES_256_GCM_SHA384",
+            "certificate_ok": true,
+            "application_ack": false,
+            "expected_ack_seq": 42,
+            "received_ack_seq": null,
+            "connection_closed": true
+          }
+        }
+      },
+      "expected_interpretation": "Il 41 storico appartiene al traffico precedente. TLS del tentativo 002 e riuscito, ma il nuovo canale non e dichiarato attivo e viene chiuso."
+    },
+    {
+      "name": "lost_response_retry",
+      "request": {
+        "schema_version": 1,
+        "message_type": "request",
+        "request_id": "req-iot-002",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "set_profile",
+        "policy_id": "policy-iot-002",
+        "policy_version": 2,
+        "required_profile": "HYBRID",
+        "timeout_ms": 10000,
+        "reason": "Evento di rischio alto simulato"
+      },
+      "response": {
+        "schema_version": 1,
+        "message_type": "response",
+        "request_id": "req-iot-002",
+        "run_id": "demo-001",
+        "target_id": "iot",
+        "action": "set_profile",
+        "ok": true,
+        "state": {
+          "status": "HYBRID_ACTIVE",
+          "policy_id": "policy-iot-002",
+          "policy_version": 2,
+          "desired_profile": "HYBRID",
+          "observed_profile": "HYBRID",
+          "observed_group": "X25519MLKEM768",
+          "certificate_ok": true,
+          "application_ack": true,
+          "connection_id": "conn-iot-002",
+          "last_acked_seq": 42,
+          "supported_profiles": [
+            "CLASSIC",
+            "HYBRID"
+          ]
+        },
+        "duration_ms": 185.4,
+        "error": null
+      },
+      "exchanges": [
+        {
+          "step": "initial_request_response_lost",
+          "request": {
+            "schema_version": 1,
+            "message_type": "request",
+            "request_id": "req-iot-002",
+            "run_id": "demo-001",
+            "target_id": "iot",
+            "action": "set_profile",
+            "policy_id": "policy-iot-002",
+            "policy_version": 2,
+            "required_profile": "HYBRID",
+            "timeout_ms": 10000,
+            "reason": "Evento di rischio alto simulato"
+          },
+          "helper_response": {
+            "schema_version": 1,
+            "message_type": "response",
+            "request_id": "req-iot-002",
+            "run_id": "demo-001",
+            "target_id": "iot",
+            "action": "set_profile",
+            "ok": true,
+            "state": {
+              "status": "HYBRID_ACTIVE",
+              "policy_id": "policy-iot-002",
+              "policy_version": 2,
+              "desired_profile": "HYBRID",
+              "observed_profile": "HYBRID",
+              "observed_group": "X25519MLKEM768",
+              "certificate_ok": true,
+              "application_ack": true,
+              "connection_id": "conn-iot-002",
+              "last_acked_seq": 42,
+              "supported_profiles": [
+                "CLASSIC",
+                "HYBRID"
+              ]
+            },
+            "duration_ms": 185.4,
+            "error": null
+          },
+          "response_delivered": false,
+          "expected_profile_applications": 1,
+          "expected_new_tls_connections": 1
+        },
+        {
+          "step": "retry_identical_request",
+          "request": {
+            "schema_version": 1,
+            "message_type": "request",
+            "request_id": "req-iot-002",
+            "run_id": "demo-001",
+            "target_id": "iot",
+            "action": "set_profile",
+            "policy_id": "policy-iot-002",
+            "policy_version": 2,
+            "required_profile": "HYBRID",
+            "timeout_ms": 10000,
+            "reason": "Evento di rischio alto simulato"
+          },
+          "helper_response": {
+            "schema_version": 1,
+            "message_type": "response",
+            "request_id": "req-iot-002",
+            "run_id": "demo-001",
+            "target_id": "iot",
+            "action": "set_profile",
+            "ok": true,
+            "state": {
+              "status": "HYBRID_ACTIVE",
+              "policy_id": "policy-iot-002",
+              "policy_version": 2,
+              "desired_profile": "HYBRID",
+              "observed_profile": "HYBRID",
+              "observed_group": "X25519MLKEM768",
+              "certificate_ok": true,
+              "application_ack": true,
+              "connection_id": "conn-iot-002",
+              "last_acked_seq": 42,
+              "supported_profiles": [
+                "CLASSIC",
+                "HYBRID"
+              ]
+            },
+            "duration_ms": 185.4,
+            "error": null
+          },
+          "response_delivered": true,
+          "expected_cached_response": true,
+          "expected_profile_applications": 1,
+          "expected_new_tls_connections": 1
+        },
+        {
+          "step": "fresh_status",
+          "request": {
+            "schema_version": 1,
+            "message_type": "request",
+            "request_id": "req-iot-reconcile",
+            "run_id": "demo-001",
+            "target_id": "iot",
+            "action": "get_status"
+          },
+          "helper_response": {
+            "schema_version": 1,
+            "message_type": "response",
+            "request_id": "req-iot-reconcile",
+            "run_id": "demo-001",
+            "target_id": "iot",
+            "action": "get_status",
+            "ok": true,
+            "state": {
+              "status": "HYBRID_ACTIVE",
+              "policy_id": "policy-iot-002",
+              "policy_version": 2,
+              "desired_profile": "HYBRID",
+              "observed_profile": "HYBRID",
+              "observed_group": "X25519MLKEM768",
+              "certificate_ok": true,
+              "application_ack": true,
+              "connection_id": "conn-iot-002",
+              "last_acked_seq": 43,
+              "supported_profiles": [
+                "CLASSIC",
+                "HYBRID"
+              ]
+            },
+            "duration_ms": 0.5,
+            "error": null
+          },
+          "response_delivered": true,
+          "expected_cached_response": false,
+          "expected_profile_applications": 1,
+          "expected_new_tls_connections": 1
+        }
+      ],
+      "expected_interpretation": "Una sola applicazione della policy e una sola nuova connessione TLS. La risposta conservata riporta il messaggio 42; la lettura corrente puo riportare 43. I valori temporali sono fittizi."
     }
-  ]
+  ],
+  "proposal_revision": "2026-11-20"
 }
