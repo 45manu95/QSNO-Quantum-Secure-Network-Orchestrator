@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import time
 import uuid
 
 from .helper_result import EXAMPLES, GROUPS
@@ -16,7 +17,8 @@ def handle_alarm(decision, run_id, policy_id, version, block_classic, send_profi
     return apply_decision(decision, run_id, policy_id, version, block_classic, send_profile)
 
 
-def apply_decision(decision, run_id, policy_id, version, block_classic, send_profile=apply_profile):
+def apply_decision(decision, run_id, policy_id, version, block_classic, send_profile=apply_profile, *,
+                   event_received_ns=None):
     target = decision["target_id"]
     profile = decision["desired_profile"]
     if (target not in ("iot", "drone") or profile not in GROUPS
@@ -39,6 +41,8 @@ def apply_decision(decision, run_id, policy_id, version, block_classic, send_pro
             or rule.get("status") != "RULE_VERIFIED" or rule.get("verification") != "flow_stats"):
         return dict(result, sdn="UNKNOWN")
     result["sdn"] = "RULE_VERIFIED"
+    if event_received_ns is not None:
+        result["event_to_sdn_verified_ms"] = (time.monotonic_ns() - event_received_ns) / 1_000_000
     if decision["decision"] == "BLOCK":
         return dict(result, outcome="BLOCKED", unsupported_by=decision["unsupported_by"])
 

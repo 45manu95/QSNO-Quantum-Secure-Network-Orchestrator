@@ -3,6 +3,7 @@
 import argparse
 import json
 import sys
+import time
 from datetime import datetime
 
 from .helper_result import EXAMPLES, GROUPS
@@ -19,6 +20,8 @@ def process_events(lines, run_id, target, client, server, block, send=apply_prof
     previous_decision = None
     last_high = None
     for line in lines:
+        # La riga è disponibile al lettore. Il timestamp del monitor ha un'altra origine.
+        received_ns = time.monotonic_ns()
         try:
             event = json.loads(line, object_pairs_hook=unique_fields)
             fields = {"event_id", "target_id", "severity", "source", "timestamp"}
@@ -52,7 +55,10 @@ def process_events(lines, run_id, target, client, server, block, send=apply_prof
             last_high = max(last_high, when) if last_high else when
         decision = policy.decide(target, severity, minimum_profile=minimum, battery_pct=battery,
                                  network=network, client_profiles=client, server_profiles=server)
-        info = {"event_id": event_id, "event_status": "PROCESSED", "severity": severity,
+        decision_ms = (time.monotonic_ns() - received_ns) / 1_000_000
+        info = {"run_id": run_id, "target_id": target, "event_id": event_id,
+                "event_status": "PROCESSED", "severity": severity,
+                "event_to_decision_ms": decision_ms, "event_to_sdn_verified_ms": None,
                 "alarm_active": target in policy.active_alarms, "reason": decision["reason"]}
         required_action = (decision["decision"], decision["desired_profile"])
         if severity != "high" and required_action == previous_decision:
@@ -62,7 +68,8 @@ def process_events(lines, run_id, target, client, server, block, send=apply_prof
             continue
         version += 1
         seen[event_id] = (event, version)
-        result = apply_decision(decision, run_id, event_id, version, block, send)
+        result = apply_decision(decision, run_id, event_id, version, block, send,
+                                event_received_ns=received_ns)
         previous_decision = required_action if result["sdn"] == "RULE_VERIFIED" else None
         yield {**info, **result}
 
