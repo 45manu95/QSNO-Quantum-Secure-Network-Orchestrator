@@ -10,21 +10,32 @@ from .policy import AdaptivePolicy
 
 
 def handle_alarm(decision, run_id, policy_id, version, block_classic, send_profile=apply_profile):
-    target = decision["target_id"]
     if (decision["reason"] != "high_risk" or decision["desired_profile"] != "HYBRID"
-            or decision["decision"] not in ("BLOCK", "REQUEST_PROFILE") or target not in ("iot", "drone")):
+            or decision["decision"] not in ("BLOCK", "REQUEST_PROFILE")):
         raise ValueError("Attesa una decisione di rischio alto per il target")
+    return apply_decision(decision, run_id, policy_id, version, block_classic, send_profile)
+
+
+def apply_decision(decision, run_id, policy_id, version, block_classic, send_profile=apply_profile):
+    target = decision["target_id"]
+    profile = decision["desired_profile"]
+    if (target not in ("iot", "drone") or profile not in GROUPS
+            or decision["decision"] not in ("BLOCK", "REQUEST_PROFILE")):
+        raise ValueError("Decisione di policy non valida")
     if (not IDENTIFIER.fullmatch(run_id) or run_id in (".", "..") or not IDENTIFIER.fullmatch(policy_id)
             or type(version) is not int or version < 1):
         raise ValueError("Identificativi o versione di policy non validi")
 
     result = {"target_id": target, "policy_id": policy_id, "policy_version": version,
-              "desired_profile": "HYBRID", "helper_requested": False, "outcome": "UNKNOWN"}
+              "desired_profile": profile, "helper_requested": False, "outcome": "UNKNOWN"}
+    blocked = decision["decision"] == "BLOCK" or profile == "HYBRID"
+    action = "block" if blocked else "unblock"
+    result["sdn_action"] = action
     try:
-        rule = block_classic(target, blocked=True)
+        rule = block_classic(target, blocked=blocked)
     except (OSError, ValueError, RuntimeError) as error:
         return dict(result, sdn="UNKNOWN", detail=str(error))
-    if (not isinstance(rule, dict) or rule.get("target_id") != target or rule.get("action") != "block"
+    if (not isinstance(rule, dict) or rule.get("target_id") != target or rule.get("action") != action
             or rule.get("status") != "RULE_VERIFIED" or rule.get("verification") != "flow_stats"):
         return dict(result, sdn="UNKNOWN")
     result["sdn"] = "RULE_VERIFIED"
@@ -35,7 +46,7 @@ def handle_alarm(decision, run_id, policy_id, version, block_classic, send_profi
     command = {"schema_version": 1, "message_type": "request", "run_id": run_id,
                "target_id": target, "request_id": uuid.uuid5(uuid.NAMESPACE_OID, identity).hex,
                "policy_id": policy_id, "policy_version": version, "action": "set_profile",
-               "required_profile": "HYBRID", "reason": decision["reason"], "timeout_ms": 10000}
+               "required_profile": profile, "reason": decision["reason"], "timeout_ms": 10000}
     result["helper_requested"] = True
     helper = send_profile(command)
     return dict(result, helper=helper, outcome=helper["outcome"])
