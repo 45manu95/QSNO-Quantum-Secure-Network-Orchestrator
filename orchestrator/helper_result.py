@@ -9,6 +9,17 @@ GROUPS = {"CLASSIC": "X25519", "HYBRID": "X25519MLKEM768"}
 EXAMPLES = Path(__file__).resolve().parents[1] / "contracts" / "qsno-helper-v1.examples.json"
 
 
+def confirmed_active(state, profile):
+    active = profile + "_ACTIVE"
+    return (state.get("status") == active and state.get("observed_profile") == profile
+            and state.get("observed_group") == GROUPS[profile]
+            and state.get("certificate_ok") is True and state.get("application_ack") is True
+            and isinstance(state.get("connection_id"), str) and bool(state["connection_id"])
+            and type(state.get("last_acked_seq")) is int and state["last_acked_seq"] >= 0
+            and isinstance(state.get("supported_profiles"), list)
+            and profile in state["supported_profiles"])
+
+
 def interpret_set_profile(request, response):
     """Restituisce l'esito della chiamata, senza modificare lo stato SDN o TLS."""
     if request["action"] != "set_profile" or request["required_profile"] not in GROUPS:
@@ -48,16 +59,9 @@ def interpret_set_profile(request, response):
             return {"outcome": "BLOCKED", "code": "timeout", "phase": error.get("phase")}
         return {"outcome": "UNKNOWN"}
 
-    active = profile + "_ACTIVE"
     if (response.get("ok") is True and "error" in response and error is None
-            and state.get("status") == active and state.get("observed_profile") == profile
-            and state.get("observed_group") == GROUPS[profile]
-            and state.get("certificate_ok") is True and state.get("application_ack") is True
-            and isinstance(state.get("connection_id"), str) and state["connection_id"]
-            and type(state.get("last_acked_seq")) is int and state["last_acked_seq"] >= 0
-            and isinstance(state.get("supported_profiles"), list)
-            and profile in state["supported_profiles"]):
-        return {"outcome": active, "connection_id": state["connection_id"]}
+            and confirmed_active(state, profile)):
+        return {"outcome": profile + "_ACTIVE", "connection_id": state["connection_id"]}
     return {"outcome": "UNKNOWN"}
 
 
