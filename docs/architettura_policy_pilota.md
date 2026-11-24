@@ -23,7 +23,15 @@ La lettura delle statistiche OpenFlow produce l'esito `RULE_VERIFIED`. Il gruppo
 
 L'allarme rimane attivo dopo un evento basso. Un reset esplicito consente una nuova valutazione delle condizioni. Durante una singola esecuzione il lettore distingue la ripetizione dello stesso evento dal riutilizzo dello stesso ID con contenuto diverso. Entrambi i casi evitano una seconda applicazione. Un errore durante la verifica SDN produce UNKNOWN e impedisce l'invio del comando all'helper. La versione della policy è relativa alla prova e al target.
 
-Il lettore attuale acquisisce rete e batteria all'avvio. Il mantenimento della decisione invariata evita comandi ripetuti in alcuni casi; resta da implementare e verificare la permanenza temporale prima di reagire a cambiamenti non urgenti della telemetria. Il modello assume una VM amministrata da utenti fidati, identità dei nodi assegnate dalla topologia e servizi in ascolto sulle porte previste. Il filtro sullo switch distingue i flussi tramite indirizzi e porte. La verifica del gruppo TLS e dell'identità del server appartiene agli endpoint. Gli eventi di rischio sono generati per l'esperimento.
+Il lettore inizializza rete e batteria all'avvio e accetta durante la stessa esecuzione campioni completi per il target. Per esempio, in modalità `listen` una riga di input può essere:
+
+```json
+{"event_id":"T1","target_id":"drone","severity":"telemetry","source":"monitor-simulato","timestamp":"2026-11-24T10:00:01Z","battery_pct":25,"network":"nominal"}
+```
+
+Con profilo HYBRID iniziale, rischio basso e CLASSIC consentito, il primo campione al 25% apre una decisione in attesa (`event_status=PENDING`). Un secondo campione distinto e più recente che conferma la stessa scelta dopo almeno 10 secondi di orologio monotono locale permette il cambio. Un ritorno alla scelta precedente annulla l'attesa. La sola assenza di nuovi campioni mantiene il profilo in uso. La finestra è configurabile con `--stability-seconds`; il blocco per capacità mancanti e la gestione dell'allarme alto sono immediati all'elaborazione dell'evento. Il profilo di rete dichiarato è un ingresso per QSNO; la configurazione del collegamento in Mininet è indipendente. La verifica offline si avvia con `python3 -B -m orchestrator.risk_events telemetry-example` e usa controller e helper simulati.
+
+Il modello assume una VM amministrata da utenti fidati, identità dei nodi assegnate dalla topologia e servizi in ascolto sulle porte previste. Il filtro sullo switch distingue i flussi tramite indirizzi e porte. La verifica del gruppo TLS e dell'identità del server appartiene agli endpoint. Gli eventi di rischio sono generati per l'esperimento.
 
 ## Misure pilota
 
