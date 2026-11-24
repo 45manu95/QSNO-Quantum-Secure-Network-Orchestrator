@@ -33,6 +33,17 @@ Con profilo HYBRID iniziale, rischio basso e CLASSIC consentito, il primo campio
 
 Il modello assume una VM amministrata da utenti fidati, identità dei nodi assegnate dalla topologia e servizi in ascolto sulle porte previste. Il filtro sullo switch distingue i flussi tramite indirizzi e porte. La verifica del gruppo TLS e dell'identità del server appartiene agli endpoint. Gli eventi di rischio sono generati per l'esperimento.
 
+## Verifiche di robustezza sulla VM del 24 novembre
+
+| Prova | Evidenza osservata |
+|---|---|
+| Allarme e reset sul drone (`telemetria-drone-1795535632`) | Il secondo campione al 25% ha portato allo sblocco in 4,545 ms dalla lettura di T2. H1 ha reinstallato la regola, L1 l'ha mantenuta e il reset R1 l'ha rimossa in 5,218 ms dalla lettura del reset. In T2 e R1 l'helper indisponibile ha dato UNKNOWN. |
+| IoT con sola capacità CLASSIC (`iot-solo-classic-1795537813`) | H1 ha richiesto HYBRID. Il blocco è stato verificato in 6,153 ms. QSNO ha restituito BLOCKED senza chiamare l'helper. Il drone ha raggiunto il servizio, l'IoT è andato in timeout e la regola 0x1001 ha contato 2 pacchetti, 148 byte. Dopo la rimozione manuale l'IoT si è ricollegato. |
+| Doppia consegna di H1 (`duplicato-iot-1795538209`) | La prima consegna ha prodotto BLOCKED con policy versione 1. La seconda, nello stesso processo, ha restituito DUPLICATE con riferimento alla versione 1. |
+| Oscillazione sul drone (serie `oscillazione-drone-*`) | Sulla rete nominale la discesa dal 35% al 25% ha aperto un cambio verso CLASSIC in attesa di conferma. Il ritorno al 35% ha mantenuto HYBRID come profilo desiderato e la versione 1. Il gestore ha mantenuto la regola e non ha richiesto l'helper per il cambio. Il controllo finale su s1 ha mostrato il blocco 0x1002 ancora presente. |
+
+I tempi riportati in questa sezione sono singole osservazioni della verifica SDN. Il controllo della regola e il profilo desiderato descrivono il piano di controllo. La conferma del gruppo negoziato e della ripresa applicativa richiede una connessione osservata dall'endpoint.
+
 ## Misure pilota
 
 I tempi indicati sono mediane. Ogni riga comprende dieci misure valide per ciascuna condizione riportata.
